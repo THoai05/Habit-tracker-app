@@ -17,7 +17,7 @@
 - **Thư viện:** LiveData, ViewModel, RecyclerView, NotificationManager,...
 
 ## 📂 Cấu trúc thư mục chính
-(data, ui, utils... như bạn đã liệt kê)
+(data, ui, utils...)
 
 ## 🚀 Mục tiêu
 Ứng dụng giúp người dùng tạo, duy trì và theo dõi thói quen tốt mỗi ngày.
