@@ -1,136 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EAF6F6"
-    android:fillViewport="true"
     tools:context="ui.habit.edit.EditHabitActivity">
 
-    <LinearLayout
+    <!-- Scrollable content -->
+    <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/rootLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Tiêu đề ở giữa -->
+            <TextView
+                android:id="@+id/tvHabitTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="20dp"
+                android:text="Create New Habit"
+                android:textColor="#212121"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etHabitName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter habit name (e.g. Drink water)"
+                android:background="@drawable/bg_edittext"
+                android:padding="12dp"
+                android:textSize="16sp" />
+
+            <!-- Dòng chọn màu -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Color"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:textColor="#212121" />
+
+            <LinearLayout
+                android:id="@+id/colorSelectorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <View
+                    android:id="@+id/color1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="6dp"
+                    android:backgroundTint="#FFD6E0"
+                    android:background="@drawable/bg_color_circle" />
+
+                <View
+                    android:id="@+id/color2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="6dp"
+                    android:backgroundTint="#FFF3B0"
+                    android:background="@drawable/bg_color_circle" />
+
+                <View
+                    android:id="@+id/color3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="6dp"
+                    android:backgroundTint="#C9E4DE"
+                    android:background="@drawable/bg_color_circle" />
+
+                <View
+                    android:id="@+id/color4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="6dp"
+                    android:backgroundTint="#D8E2DC"
+                    android:background="@drawable/bg_color_circle" />
+
+                <View
+                    android:id="@+id/color5"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="6dp"
+                    android:backgroundTint="#B8E0D2"
+                    android:background="@drawable/bg_color_circle" />
+            </LinearLayout>
+
+            <!-- Các trường chức năng -->
+            <include layout="@layout/item_habit_field" android:id="@+id/fieldUpNext" />
+            <include layout="@layout/item_habit_field" android:id="@+id/fieldRepeat" />
+            <include layout="@layout/item_habit_field" android:id="@+id/fieldTime" />
+            <include layout="@layout/item_habit_field" android:id="@+id/fieldReminder" />
+            <include layout="@layout/item_habit_field" android:id="@+id/fieldTag" />
+            <include layout="@layout/item_habit_field" android:id="@+id/fieldGoal" />
+            <include layout="@layout/item_habit_field"
+                android:id="@+id/fieldSubtasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp" />
+
+            <TextView
+                android:id="@+id/tvSubtasksInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Subtasks can be set as your daily routine or checklist"
+                android:textColor="#757575"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Save luôn nằm trên cùng bên phải -->
+    <TextView
+        android:id="@+id/tvSaveHabit"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_gravity="top|end"
+        android:padding="16dp"
+        android:text="Save"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true" />
 
-        <!-- Tiêu đề -->
-
-        <!-- Trường nhập tên thói quen -->
-        <TextView
-            android:id="@+id/tvHabitTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="20dp"
-            android:text="Create New Habit"
-            android:textColor="#212121"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etHabitName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter habit name (e.g. Drink water)"
-            android:background="@drawable/bg_edittext"
-            android:padding="12dp"
-            android:textSize="16sp" />
-
-        <!-- Dòng chọn màu -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Color"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:textColor="#212121" />
-
-        <LinearLayout
-            android:id="@+id/colorSelectorLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="8dp">
-
-            <!-- Vòng tròn màu -->
-            <View
-                android:id="@+id/color1"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="6dp"
-                android:backgroundTint="#FFD6E0"
-                android:background="@drawable/bg_color_circle" />
-
-            <View
-                android:id="@+id/color2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="6dp"
-                android:backgroundTint="#FFF3B0"
-                android:background="@drawable/bg_color_circle" />
-
-            <View
-                android:id="@+id/color3"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="6dp"
-                android:backgroundTint="#C9E4DE"
-                android:background="@drawable/bg_color_circle" />
-
-            <View
-                android:id="@+id/color4"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="6dp"
-                android:backgroundTint="#D8E2DC"
-                android:background="@drawable/bg_color_circle" />
-
-            <View
-                android:id="@+id/color5"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="6dp"
-                android:backgroundTint="#B8E0D2"
-                android:background="@drawable/bg_color_circle" />
-        </LinearLayout>
-
-        <!-- Các trường chức năng -->
-        <include layout="@layout/item_habit_field" android:id="@+id/fieldUpNext" />
-        <include layout="@layout/item_habit_field" android:id="@+id/fieldRepeat" />
-        <include layout="@layout/item_habit_field" android:id="@+id/fieldTime" />
-        <include layout="@layout/item_habit_field" android:id="@+id/fieldReminder" />
-        <include layout="@layout/item_habit_field" android:id="@+id/fieldTag" />
-        <include layout="@layout/item_habit_field" android:id="@+id/fieldGoal" />
-        <include layout="@layout/item_habit_field" android:id="@+id/fieldSubtasks" />
-
-        <!-- Nút lưu / xóa -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="30dp">
-
-            <Button
-                android:id="@+id/btnSaveHabit"
-                android:layout_width="0dp"
-                android:layout_height="37dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="#4CAF50"
-                android:text="Save"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/btnDeleteHabit"
-                android:layout_width="0dp"
-                android:layout_height="37dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="#E57373"
-                android:text="Delete"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+</FrameLayout>
