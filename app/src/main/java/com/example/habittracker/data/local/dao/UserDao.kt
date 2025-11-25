@@ -5,6 +5,9 @@ import com.example.habittracker.data.model.User
 
 @Dao
 interface UserDao {
+    @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
+    suspend fun getUserById(id: Int): User?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User): Long
 

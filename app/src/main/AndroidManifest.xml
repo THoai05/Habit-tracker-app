@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Habittracker">
 
-        <activity android:name=".ui.habit.edit.EditHabitActivity"
+        <activity android:name=".ui.habit.list.HabitListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Activity Main vẫn khai báo nhưng không khởi chạy -->
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ui.habit.edit.EditHabitActivity" />
     </application>
 
 </manifest>
