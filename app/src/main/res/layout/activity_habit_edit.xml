@@ -99,7 +99,7 @@
             </LinearLayout>
 
             <!-- Các trường chức năng -->
-            <include layout="@layout/item_habit_field" android:id="@+id/fieldUpNext" />
+            <include layout="@layout/item_habit_field"   android:id="@+id/fieldUpNext" />
             <include layout="@layout/item_habit_field" android:id="@+id/fieldRepeat" />
             <include layout="@layout/item_habit_field" android:id="@+id/fieldTime" />
             <include layout="@layout/item_habit_field" android:id="@+id/fieldReminder" />
