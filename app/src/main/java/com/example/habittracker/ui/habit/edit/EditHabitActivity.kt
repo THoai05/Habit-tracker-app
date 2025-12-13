@@ -4,11 +4,8 @@ import android.app.TimePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import android.view.View
-import android.widget.Toast
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -53,20 +50,16 @@ class EditHabitActivity : AppCompatActivity() {
     private var selectedTargetUnit: String? = null
 
     private val TAGS = arrayOf(
-        "No tag",
-        "Morning Routine",
-        "Workout",
-        "Clean Room",
-        "Healthy LifeStyle",
-        "Sleep Better",
-        "Relationship"
+        "No tag", "Morning Routine", "Workout", "Clean Room", "Healthy LifeStyle", "Sleep Better", "Relationship"
     )
+
+    private var habitId: Int = -1 // ⬅ biến toàn cục để phân biệt create/edit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_edit)
 
-        // Bind views
+        // --- Bind views ---
         rootLayout = findViewById(R.id.rootLayout)
         etHabitName = findViewById(R.id.etHabitName)
         color1 = findViewById(R.id.color1)
@@ -82,16 +75,59 @@ class EditHabitActivity : AppCompatActivity() {
         fieldTagValue = findViewById<LinearLayout>(R.id.fieldTag).findViewById(R.id.tvFieldValue)
         fieldGoalValue = findViewById<LinearLayout>(R.id.fieldGoal).findViewById(R.id.tvFieldValue)
 
+        // --- Set icon cho từng field ---
+        findViewById<LinearLayout>(R.id.fieldUpNext)
+            .findViewById<ImageView>(R.id.ivFieldIcon)
+            .setImageResource(R.drawable.ic_calendar)
+
+        findViewById<LinearLayout>(R.id.fieldRepeat)
+            .findViewById<ImageView>(R.id.ivFieldIcon)
+            .setImageResource(R.drawable.ic_repeat)
+
+        findViewById<LinearLayout>(R.id.fieldTime)
+            .findViewById<ImageView>(R.id.ivFieldIcon)
+            .setImageResource(R.drawable.ic_clock)
+
+        findViewById<LinearLayout>(R.id.fieldReminder)
+            .findViewById<ImageView>(R.id.ivFieldIcon)
+            .setImageResource(R.drawable.ic_bell)
+
+        findViewById<LinearLayout>(R.id.fieldTag)
+            .findViewById<ImageView>(R.id.ivFieldIcon)
+            .setImageResource(R.drawable.ic_tag)
+
+        findViewById<LinearLayout>(R.id.fieldGoal)
+            .findViewById<ImageView>(R.id.ivFieldIcon)
+            .setImageResource(R.drawable.ic_goal)
+
+        // --- Set title cho từng field ---
+        findViewById<LinearLayout>(R.id.fieldUpNext)
+            .findViewById<TextView>(R.id.tvFieldName)
+            .text = "Up Next"
+        findViewById<LinearLayout>(R.id.fieldRepeat)
+            .findViewById<TextView>(R.id.tvFieldName)
+            .text = "Repeat"
+        findViewById<LinearLayout>(R.id.fieldTime)
+            .findViewById<TextView>(R.id.tvFieldName)
+            .text = "Time"
+        findViewById<LinearLayout>(R.id.fieldReminder)
+            .findViewById<TextView>(R.id.tvFieldName)
+            .text = "Reminder"
+        findViewById<LinearLayout>(R.id.fieldTag)
+            .findViewById<TextView>(R.id.tvFieldName)
+            .text = "Tag"
+        findViewById<LinearLayout>(R.id.fieldGoal)
+            .findViewById<TextView>(R.id.tvFieldName)
+            .text = "Goal"
 
         setupColorSelector()
         setupFieldClicks()
 
-        findViewById<TextView>(R.id.tvSaveHabit).setOnClickListener {
-            saveHabitToDatabase()
-        }
-        val habitId = intent.getIntExtra("habitId", -1)
+        // Lấy habitId từ intent
+        habitId = intent.getIntExtra("habitId", -1)
+
         if (habitId == -1) {
-            // New habit: set default field names
+            // CREATE NEW HABIT
             fieldUpNextValue.text = "Up Next"
             fieldRepeatValue.text = "Repeat"
             fieldTimeValue.text = "Time"
@@ -99,7 +135,7 @@ class EditHabitActivity : AppCompatActivity() {
             fieldTagValue.text = "Tag"
             fieldGoalValue.text = "Goal"
         } else {
-            // Edit habit: load data from DB
+            // EDIT HABIT: load dữ liệu từ DB
             val db = DatabaseProvider.getDatabase(this)
             val habitDao = db.habitDao()
             lifecycleScope.launch {
@@ -134,9 +170,11 @@ class EditHabitActivity : AppCompatActivity() {
                 }
             }
         }
+
+        findViewById<TextView>(R.id.tvSaveHabit).setOnClickListener {
+            saveHabitToDatabase()
+        }
     }
-
-
 
     private fun setupColorSelector() {
         val colorViews = listOf(color1, color2, color3, color4, color5)
@@ -151,17 +189,12 @@ class EditHabitActivity : AppCompatActivity() {
                 selectedColor = Color.parseColor(colorHex[index])
                 rootLayout.setBackgroundColor(selectedColor)
 
-                // Reset border
                 colorViews.forEach { v ->
                     val bg = v.background
-                    if (bg is GradientDrawable) {
-                        bg.setStroke(0, Color.TRANSPARENT)
-                    }
+                    if (bg is GradientDrawable) bg.setStroke(0, Color.TRANSPARENT)
                 }
                 val selectedDrawable = view.background
-                if (selectedDrawable is GradientDrawable) {
-                    selectedDrawable.setStroke(4, Color.BLACK)
-                }
+                if (selectedDrawable is GradientDrawable) selectedDrawable.setStroke(4, Color.BLACK)
             }
         }
     }
@@ -282,29 +315,48 @@ class EditHabitActivity : AppCompatActivity() {
                 userDao.insertUser(user)
             }
 
-            val habit = Habit(
-                userId = 1,
-                name = name,
-                repeat = selectedRepeat,
-                upNext = selectedUpNext,
-                timeMode = selectedTimeMode,
-                specifiedTime = selectedSpecifiedTime,
-                reminderMode = selectedReminderMode,
-                reminderTime = selectedReminderTime,
-                tag = selectedTag,
-                targetValue = selectedTargetValue,
-                targetUnit = selectedTargetUnit,
-                color = String.format("#%06X", 0xFFFFFF and selectedColor)
-            )
+            if (habitId == -1) {
+                // CREATE NEW HABIT
+                val newHabit = Habit(
+                    userId = 1,
+                    name = name,
+                    repeat = selectedRepeat,
+                    upNext = selectedUpNext,
+                    timeMode = selectedTimeMode,
+                    specifiedTime = selectedSpecifiedTime,
+                    reminderMode = selectedReminderMode,
+                    reminderTime = selectedReminderTime,
+                    tag = selectedTag,
+                    targetValue = selectedTargetValue,
+                    targetUnit = selectedTargetUnit,
+                    color = String.format("#%06X", 0xFFFFFF and selectedColor)
+                )
+                habitDao.insertHabit(newHabit)
+                Toast.makeText(this@EditHabitActivity, "Habit created!", Toast.LENGTH_SHORT).show()
+            } else {
+                // UPDATE EXISTING HABIT
+                val updatedHabit = Habit(
+                    id = habitId, // quan trọng
+                    userId = 1,
+                    name = name,
+                    repeat = selectedRepeat,
+                    upNext = selectedUpNext,
+                    timeMode = selectedTimeMode,
+                    specifiedTime = selectedSpecifiedTime,
+                    reminderMode = selectedReminderMode,
+                    reminderTime = selectedReminderTime,
+                    tag = selectedTag,
+                    targetValue = selectedTargetValue,
+                    targetUnit = selectedTargetUnit,
+                    color = String.format("#%06X", 0xFFFFFF and selectedColor)
+                )
+                habitDao.updateHabit(updatedHabit)
+                Toast.makeText(this@EditHabitActivity, "Habit updated!", Toast.LENGTH_SHORT).show()
+            }
 
-            habitDao.insertHabit(habit)
-            Toast.makeText(this@EditHabitActivity, "Habit saved!", Toast.LENGTH_SHORT).show()
-
-            // ⬇ Chỉ dùng 1 flag để tránh crash
             val intent = Intent(this@EditHabitActivity, HabitListActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
-
             finish()
         }
     }

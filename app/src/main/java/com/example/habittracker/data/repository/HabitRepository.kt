@@ -6,6 +6,7 @@ import com.example.habittracker.data.model.Habit
 import com.example.habittracker.data.model.HabitHistory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.example.habittracker.utils.DateUtils
 
 class HabitRepository(
     private val habitDao: HabitDao,
@@ -32,13 +33,26 @@ class HabitRepository(
         habitDao.deleteHabit(habit)
     }
 
-    // Thêm lịch sử hoàn thành trong ngày
-    suspend fun addHabitHistory(history: HabitHistory) = withContext(Dispatchers.IO) {
-        habitHistoryDao.insertHistory(history)
+    suspend fun toggleHabitToday(habitId: Int) {
+        val today = DateUtils.today()
+
+        val history = habitHistoryDao.getByHabitAndDate(habitId, today)
+
+        if (history == null) {
+            habitHistoryDao.insert(
+                HabitHistory(
+                    habitId = habitId,
+                    date = today,
+                    isCompleted = true
+                )
+            )
+        } else {
+            habitHistoryDao.delete(history)
+        }
     }
 
-    // Lấy lịch sử hoàn thành của 1 thói quen
-    suspend fun getHabitHistory(habitId: Int): List<HabitHistory> = withContext(Dispatchers.IO) {
-        habitHistoryDao.getHistoryByHabit(habitId)
+    suspend fun isCompletedToday(habitId: Int): Boolean {
+        return habitHistoryDao
+            .getByHabitAndDate(habitId, DateUtils.today()) != null
     }
 }

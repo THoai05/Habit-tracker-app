@@ -46,15 +46,12 @@ class HabitViewModel(private val repository: HabitRepository) : ViewModel() {
     }
 
     // Thêm lịch sử hoàn thành
-    fun addHabitHistory(history: HabitHistory, onComplete: () -> Unit) {
+    fun toggleHabit(habitId: Int) {
         viewModelScope.launch {
-            repository.addHabitHistory(history)
-            onComplete()
+            repository.toggleHabitToday(habitId)
+            loadHabits(
+                userId = TODO()
+            ) // reload danh sách
         }
-    }
-
-    // Lấy lịch sử thói quen
-    suspend fun getHabitHistory(habitId: Int): List<HabitHistory> {
-        return repository.getHabitHistory(habitId)
     }
 }
