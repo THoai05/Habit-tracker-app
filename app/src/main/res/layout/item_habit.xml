@@ -1,21 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_item_habit"
-    android:gravity="center_vertical">
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <!-- Color indicator -->
-    <View
-        android:id="@+id/viewColor"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="#FFD6E0" />
 
     <!-- Habit Name -->
+
+    <!-- ImageView Tick -->
+    <ImageView
+        android:id="@+id/imgCheck"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="10dp"
+        android:alpha="0.3"
+        android:padding="1dp"
+        android:src="@drawable/ic_check"
+        android:background="@drawable/bg_check_circle"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <View
+        android:id="@+id/viewColor"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:background="#FFD6E0" />
+
     <TextView
         android:id="@+id/tvHabitName"
         android:layout_width="0dp"

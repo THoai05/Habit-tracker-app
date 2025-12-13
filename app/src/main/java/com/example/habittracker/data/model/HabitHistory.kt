@@ -2,12 +2,14 @@ package com.example.habittracker.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
+import androidx.room.Index
 /**
  * Lưu lịch sử hoàn thành theo từng ngày
  * Dùng để tính streak, biểu đồ
  */
 @Entity(
     tableName = "habit_history",
+    indices = [Index(value = ["habitId", "date"], unique = true)],
     foreignKeys = [
         ForeignKey(
             entity = Habit::class,

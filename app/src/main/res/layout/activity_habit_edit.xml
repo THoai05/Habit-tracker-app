@@ -105,21 +105,16 @@
             <include layout="@layout/item_habit_field" android:id="@+id/fieldReminder" />
             <include layout="@layout/item_habit_field" android:id="@+id/fieldTag" />
             <include layout="@layout/item_habit_field" android:id="@+id/fieldGoal" />
-            <include layout="@layout/item_habit_field"
-                android:id="@+id/fieldSubtasks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp" />
 
             <TextView
                 android:id="@+id/tvSubtasksInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="230dp"
                 android:gravity="center"
                 android:text="Subtasks can be set as your daily routine or checklist"
                 android:textColor="#757575"
-                android:textSize="14sp" />
+                android:textSize="17sp" />
 
         </LinearLayout>
     </ScrollView>
