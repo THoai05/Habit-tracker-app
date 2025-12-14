@@ -3,6 +3,7 @@ package com.example.habittracker.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 
 @Entity(
     tableName = "habits",
@@ -43,3 +44,9 @@ data class Habit(
 
     val isArchived: Boolean = false // Lưu trữ (ẩn thói quen)
 )
+
+{
+    // Thêm dòng này: Biến tạm để check trạng thái hoàn thành trên UI
+    @Ignore
+    var isCompletedToday: Boolean = false
+}
