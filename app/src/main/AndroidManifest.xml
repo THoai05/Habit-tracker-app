@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Habittracker">
 
-        <activity android:name=".ui.habit.list.HabitListActivity"
+        <activity
+            android:name=".ui.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +21,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.auth.RegisterActivity" />
+
+        <activity
+            android:name=".ui.habit.list.HabitListActivity"
+            android:exported="false" />
+
+        <activity android:name=".MainActivity" />
         <activity android:name=".ui.habit.edit.EditHabitActivity" />
     </application>
 

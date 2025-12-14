@@ -24,7 +24,7 @@ class HabitViewModel(private val repository: HabitRepository) : ViewModel() {
     // Tạo thói quen
     fun addHabit(habit: Habit, onComplete: () -> Unit) {
         viewModelScope.launch {
-            repository.addHabit(habit)
+            repository.insertHabit(habit)
             onComplete()
         }
     }

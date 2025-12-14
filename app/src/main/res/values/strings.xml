@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">habittracker</string>
+    <string name="open_nav">Mở menu</string>
+    <string name="close_nav">Đóng menu</string>
 </resources>
