@@ -52,7 +52,7 @@ class EditHabitActivity : AppCompatActivity() {
     private fun setupViewModel() {
         val db = DatabaseProvider.getDatabase(this)
 // Repository yêu cầu 2 tham số: HabitDao và HabitHistoryDao
-        val repository = HabitRepository(db.habitDao(), db.habitHistoryDao())
+        val repository = HabitRepository(db.habitDao(), db.habitHistoryDao(),db.streakCacheDao())
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[EditHabitViewModel::class.java]
     }

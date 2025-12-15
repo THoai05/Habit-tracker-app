@@ -26,6 +26,8 @@ class HabitAdapter(
         val btnEdit: ImageView = itemView.findViewById(R.id.btnEdit)
         val btnDelete: ImageView = itemView.findViewById(R.id.btnDelete)
         val viewColor: View = itemView.findViewById(R.id.viewColor)
+
+        val tvStreak: TextView = itemView.findViewById(R.id.tvStreak)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
@@ -37,8 +39,26 @@ class HabitAdapter(
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
         val habit = habits[position]
 
+        if (habit.currentStreak > 0) {
+            holder.tvStreak.text = "${habit.currentStreak} 🔥"
+            holder.tvStreak.visibility = View.VISIBLE
+
+            // Nếu hôm nay đã làm -> Màu cam đậm, chưa làm -> Màu xám nhạt
+            if (habit.isCompletedToday) {
+                holder.tvStreak.alpha = 1.0f
+            } else {
+                holder.tvStreak.alpha = 0.6f
+            }
+        } else {
+            // Nếu chưa có chuỗi nào thì ẩn đi hoặc hiện "0 🔥" tuỳ bro
+            holder.tvStreak.text = "0 🔥"
+            holder.tvStreak.alpha = 0.3f
+        }
+
         // --- Hiển thị tên ---
         holder.tvHabitName.text = habit.name
+
+
 
         // --- Hiển thị trạng thái hoàn thành ---
         if (habit.isCompletedToday) {
