@@ -3,6 +3,7 @@ package com.example.habittracker.ui.habit.list
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,9 +35,6 @@ class HabitListActivity : AppCompatActivity() {
         // --- KHỞI TẠO ADAPTER ĐẦY ĐỦ 4 HÀM ---
         adapter = HabitAdapter(
             habitList,
-            onItemClick = { habit ->
-                showHabitDetailDialog(habit)
-            },
             onEditClick = { habit ->
                 val intent = Intent(this, EditHabitActivity::class.java)
                 intent.putExtra("habitId", habit.id)
@@ -122,7 +120,7 @@ class HabitListActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteHabit(habit: Habit) {
+    fun deleteHabit(habit: Habit) {
         val db = DatabaseProvider.getDatabase(this)
         val habitDao = db.habitDao()
         lifecycleScope.launch {
@@ -130,62 +128,5 @@ class HabitListActivity : AppCompatActivity() {
             adapter.removeItem(habit)
             Toast.makeText(this@HabitListActivity, "Đã xóa", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun showHabitDetailDialog(habit: Habit) {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_habit_detail)
-
-        // Binding các view trong dialog
-        val tvName = dialog.findViewById<TextView>(R.id.tvHabitDetailName)
-        val tvUpNext = dialog.findViewById<TextView>(R.id.tvHabitDetailUpNext)
-        val tvRepeat = dialog.findViewById<TextView>(R.id.tvHabitDetailRepeat)
-        val tvTime = dialog.findViewById<TextView>(R.id.tvHabitDetailTime)
-        val tvReminder = dialog.findViewById<TextView>(R.id.tvHabitDetailReminder)
-        val tvTag = dialog.findViewById<TextView>(R.id.tvHabitDetailTag)
-        val tvGoal = dialog.findViewById<TextView>(R.id.tvHabitDetailGoal)
-
-        val btnEdit = dialog.findViewById<TextView>(R.id.btnDetailEdit)
-        val btnDelete = dialog.findViewById<TextView>(R.id.btnDetailDelete)
-
-        // Gán dữ liệu
-        tvName.text = habit.name
-        tvUpNext.text = "Up Next: ${habit.upNext ?: "None"}"
-        tvRepeat.text = "Repeat: ${habit.repeat}"
-
-        val timeText = if (habit.timeMode == "SpecifiedTime" && habit.specifiedTime != null) {
-            val hour = habit.specifiedTime / 60
-            val minute = habit.specifiedTime % 60
-            "Time: %02d:%02d".format(hour, minute)
-        } else {
-            "Time: AnyTime"
-        }
-        tvTime.text = timeText
-
-        val reminderText = if (habit.reminderMode == "Custom" && habit.reminderTime != null) {
-            val hour = habit.reminderTime / 60
-            val minute = habit.reminderTime % 60
-            "Reminder: %02d:%02d".format(hour, minute)
-        } else {
-            "Reminder: None"
-        }
-        tvReminder.text = reminderText
-
-        tvTag.text = "Tag: ${habit.tag}"
-        tvGoal.text = if (habit.targetValue != null) "Goal: ${habit.targetValue} ${habit.targetUnit ?: ""}" else "Goal: None"
-
-        btnEdit.setOnClickListener {
-            dialog.dismiss()
-            val intent = Intent(this, EditHabitActivity::class.java)
-            intent.putExtra("habitId", habit.id)
-            startActivity(intent)
-        }
-
-        btnDelete.setOnClickListener {
-            dialog.dismiss()
-            deleteHabit(habit)
-        }
-
-        dialog.show()
     }
 }

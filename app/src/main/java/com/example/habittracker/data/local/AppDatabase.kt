@@ -9,7 +9,6 @@ import androidx.room.Room
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
-
 @Database(
     entities = [
         User::class,
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
         UserSettings::class,
         StreakCache::class
     ],
-    version = 1,
+    version = 2, // tăng version từ 1 -> 2
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -34,6 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userSettingsDao(): UserSettingsDao
     abstract fun streakCacheDao(): StreakCacheDao
 }
+
 object DatabaseProvider {
 
     private var INSTANCE: AppDatabase? = null
@@ -44,10 +44,11 @@ object DatabaseProvider {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "habit_tracker_db"
-            ).build()
+            )
+                .fallbackToDestructiveMigration() // xóa DB cũ và tạo DB mới
+                .build()
             INSTANCE = instance
             instance
         }
     }
 }
-
