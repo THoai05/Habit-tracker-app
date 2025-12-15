@@ -46,27 +46,34 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Mặc định load ngày hôm nay hoặc ngày đang chọn trong ViewModel
-        // Ở đây ta reset về ngày hôm nay hoặc lưu state trong VM.
-        // Để đơn giản, ta load lại theo ngày hiện tại của DateAdapter đang focus (logic này cần xử lý kỹ hơn nếu muốn giữ trạng thái scroll).
-        // Tạm thời load ngày hôm nay:
-        viewModel.loadHabitsForDate(LocalDate.now())
+        // FIXED: Thêm .toString() để chuyển LocalDate thành String
+        viewModel.loadHabitsForDate(LocalDate.now().toString())
     }
 
     private fun setupViewModel() {
         val db = DatabaseProvider.getDatabase(this)
-        val repository = HabitRepository(db.habitDao(), db.habitHistoryDao())
+        val repository = HabitRepository(db.habitDao(), db.habitHistoryDao(),db.streakCacheDao())
         val factory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
     }
 
     private fun setupAdapters() {
         // 1. Date RecyclerView
-        val days = (-15..15).map { LocalDate.now().plusDays(it.toLong()) }
+        // FIXED: Thêm .toString() vào cuối để tạo List<String> thay vì List<LocalDate>
+        val days = (-15..15).map {
+            LocalDate.now().plusDays(it.toLong()).toString()
+        }
+
+        // Lúc này biến 'date' trong lambda này đã là String chuẩn
         val dateAdapter = DateAdapter(days) { date ->
             // Khi chọn ngày -> Bảo ViewModel load dữ liệu ngày đó
             viewModel.loadHabitsForDate(date)
             Toast.makeText(this, "Ngày: $date", Toast.LENGTH_SHORT).show()
+
+            // LƯU Ý QUAN TRỌNG:
+            // Bro nên lưu biến 'date' này lại vào ViewModel hoặc biến toàn cục
+            // để lát nữa bấm nút Check thì biết là đang Check cho ngày nào.
+            viewModel.setCurrentSelectedDate(date) // (Gợi ý thêm hàm này bên ViewModel)
         }
 
         binding.rvDateList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -75,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
         // 2. Habit RecyclerView
         habitAdapter = HabitAdapter(
-            mutableListOf(), // List rỗng ban đầu
+            mutableListOf(),
             onEditClick = { habit ->
                 val intent = Intent(this, EditHabitActivity::class.java)
                 intent.putExtra("habitId", habit.id)
@@ -86,8 +93,12 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Đã xóa", Toast.LENGTH_SHORT).show()
             },
             onCheckClick = { habit ->
+                // Khi bấm check, ViewModel cần biết check cho ngày nào?
+                // Nếu ViewModel đã lưu state 'currentDate' thì gọi thế này ok.
                 viewModel.completeHabit(habit)
-                Toast.makeText(this, "Hoàn thành!", Toast.LENGTH_SHORT).show()
+
+                // Nếu Streak chưa nhảy số ngay, bro thêm dòng này để ép cập nhật list:
+                habitAdapter.notifyDataSetChanged()
             }
         )
         binding.rvHabitList.layoutManager = LinearLayoutManager(this)

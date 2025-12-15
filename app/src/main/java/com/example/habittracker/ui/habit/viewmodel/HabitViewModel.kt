@@ -15,9 +15,17 @@ class HabitViewModel(private val repository: HabitRepository) : ViewModel() {
     val habits: StateFlow<List<Habit>> = _habits
 
     // Lấy danh sách thói quen
-    fun loadHabits(userId: Int) {
+    fun loadHabits(userId: Int, date: String) { // Thêm tham số date
         viewModelScope.launch {
-            _habits.value = repository.getHabits(userId)
+            val habitList = repository.getHabits(userId)
+
+            habitList.forEach { habit ->
+                // Check xem ngày ĐÓ (date) đã làm chưa
+                habit.isCompletedToday = repository.isCompletedOnDate(habit.id, date)
+                // Tính streak (Logic tính streak vẫn giữ nguyên)
+                habit.currentStreak = repository.calculateAndGetStreak(habit.id)
+            }
+            _habits.value = habitList
         }
     }
 
@@ -46,12 +54,37 @@ class HabitViewModel(private val repository: HabitRepository) : ViewModel() {
     }
 
     // Thêm lịch sử hoàn thành
-    fun toggleHabit(habitId: Int) {
+    fun toggleHabit(habit: Habit, date: String) { // Thêm tham số date
         viewModelScope.launch {
-            repository.toggleHabitToday(habitId)
-            loadHabits(
-                userId = TODO()
-            ) // reload danh sách
+            // Gọi repo với ngày cụ thể
+            repository.toggleHabit(habit.id, date)
+
+            val newStreak = repository.calculateAndGetStreak(habit.id)
+            val isCompleted = repository.isCompletedOnDate(habit.id, date)
+
+            // Update UI
+            val updatedList = _habits.value.map {
+                if (it.id == habit.id) {
+                    it.copy().apply {
+                        this.isCompletedToday = isCompleted
+                        this.currentStreak = newStreak
+                    }
+                } else {
+                    it
+                }
+            }
+            _habits.value = updatedList
+        }
+    }
+    fun getStreak(habitId: Int) {
+        viewModelScope.launch {
+            // Gọi repository tính toán
+            val streak = repository.calculateAndGetStreak(habitId)
+
+            // Log ra check thử hoặc update vào LiveData/StateFlow để UI hiển thị
+            println("Streak của Habit $habitId là: $streak 🔥")
+
+            // Ví dụ: _uiState.value = _uiState.value.copy(currentStreak = streak)
         }
     }
 }

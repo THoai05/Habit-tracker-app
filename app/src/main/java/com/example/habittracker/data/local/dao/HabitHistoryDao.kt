@@ -27,5 +27,8 @@ interface HabitHistoryDao {
         WHERE habitId = :habitId AND isCompleted = 1
     """)
     suspend fun countCompletedDays(habitId: Int): Int
+
+    @Query("SELECT date FROM habit_history WHERE habitId = :habitId AND isCompleted = 1 ORDER BY date DESC")
+    suspend fun getCompletedDates(habitId: Int): List<String>
 }
 
