@@ -2,135 +2,167 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:background="@android:color/transparent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="24dp"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_dialog_rounded"
-        android:clipToPadding="false">
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="12dp">
 
-        <!-- Habit Name -->
-        <TextView
-            android:id="@+id/tvHabitDetailName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Habit Name"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#212121"
-            android:paddingBottom="16dp"/>
-
-        <!-- Separator -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Up Next -->
-        <TextView
-            android:id="@+id/tvHabitDetailUpNext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Up Next:"
-            android:textSize="16sp"
-            android:textColor="#424242"
-            android:paddingVertical="8dp"/>
-
-        <!-- Repeat -->
-        <TextView
-            android:id="@+id/tvHabitDetailRepeat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Repeat:"
-            android:textSize="16sp"
-            android:textColor="#424242"
-            android:paddingVertical="8dp"/>
-
-        <!-- Time -->
-        <TextView
-            android:id="@+id/tvHabitDetailTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Time:"
-            android:textSize="16sp"
-            android:textColor="#424242"
-            android:paddingVertical="8dp"/>
-
-        <!-- Reminder -->
-        <TextView
-            android:id="@+id/tvHabitDetailReminder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reminder:"
-            android:textSize="16sp"
-            android:textColor="#424242"
-            android:paddingVertical="8dp"/>
-
-        <!-- Tag -->
-        <TextView
-            android:id="@+id/tvHabitDetailTag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tag:"
-            android:textSize="16sp"
-            android:textColor="#424242"
-            android:paddingVertical="8dp"/>
-
-        <!-- Goal -->
-        <TextView
-            android:id="@+id/tvHabitDetailGoal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Goal:"
-            android:textSize="16sp"
-            android:textColor="#424242"
-            android:paddingVertical="8dp"/>
-
-        <!-- Separator -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="12dp"/>
-
-        <!-- Buttons -->
         <LinearLayout
-            android:orientation="horizontal"
-            android:gravity="end"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spacing="16dp">
+            android:padding="24dp">
 
+            <!-- Habit Name -->
             <TextView
-                android:id="@+id/btnDetailEdit"
+                android:id="@+id/tvHabitDetailName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Habit Name"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#212121"
+                android:paddingBottom="16dp"/>
+
+            <!-- Field example: icon + text -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_repeat"
+                    app:tint="#757575"/>
+                <TextView
+                    android:id="@+id/tvHabitDetailRepeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Repeat:"
+                    android:textSize="16sp"
+                    android:textColor="#424242"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_clock"
+                    app:tint="#757575" />
+                <TextView
+                    android:id="@+id/tvHabitDetailTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time:"
+                    android:textSize="16sp"
+                    android:textColor="#424242"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_bell"
+                    app:tint="#757575" />
+                <TextView
+                    android:id="@+id/tvHabitDetailReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reminder:"
+                    android:textSize="16sp"
+                    android:textColor="#424242"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_goal"
+                    app:tint="#757575" />
+                <TextView
+                    android:id="@+id/tvHabitDetailGoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Goal:"
+                    android:textSize="16sp"
+                    android:textColor="#424242"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:spacing="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDetailEdit"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="Edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDetailDelete"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="Remove"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <!-- Note -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Note"
+                android:layout_marginTop="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etHabitNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="3"
+                    android:gravity="top"
+                    android:background="@android:color/transparent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/btnSaveNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit"
-                android:textSize="16sp"
+                android:text="Save"
                 android:textColor="@color/purple_700"
-                android:padding="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:layout_gravity="end"
+                android:layout_marginTop="16dp"/>
 
-            <TextView
-                android:id="@+id/btnDetailDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove"
-                android:textSize="16sp"
-                android:textColor="@android:color/holo_red_dark"
-                android:padding="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"/>
         </LinearLayout>
-
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </ScrollView>

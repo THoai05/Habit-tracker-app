@@ -42,7 +42,9 @@ data class Habit(
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long? = null,
 
-    val isArchived: Boolean = false // Lưu trữ (ẩn thói quen)
+    val isArchived: Boolean = false, // Lưu trữ (ẩn thói quen)
+
+    var note: String? = null
 )
 
 {

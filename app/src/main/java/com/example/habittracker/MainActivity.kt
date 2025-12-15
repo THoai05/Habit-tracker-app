@@ -76,9 +76,6 @@ class MainActivity : AppCompatActivity() {
         // 2. Habit RecyclerView
         habitAdapter = HabitAdapter(
             mutableListOf(), // List rỗng ban đầu
-            onItemClick = { habit ->
-                Toast.makeText(this, "Detail: ${habit.name}", Toast.LENGTH_SHORT).show()
-            },
             onEditClick = { habit ->
                 val intent = Intent(this, EditHabitActivity::class.java)
                 intent.putExtra("habitId", habit.id)
