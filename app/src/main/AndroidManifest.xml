@@ -29,6 +29,9 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.habit.edit.EditHabitActivity" />
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
