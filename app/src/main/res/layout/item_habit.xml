@@ -12,7 +12,6 @@
 
     android:background="@drawable/bg_habit_card"
     android:elevation="4dp"
-
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"> <ImageView
