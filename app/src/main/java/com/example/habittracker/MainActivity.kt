@@ -13,8 +13,11 @@ import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.ui.adapter.DateAdapter
 import com.example.habittracker.ui.habit.edit.EditHabitActivity
 import com.example.habittracker.ui.habit.list.HabitAdapter
+import com.example.habittracker.ui.notifications.NotificationsActivity
+import com.example.habittracker.ui.settings.SettingsActivity
 import com.example.habittracker.ui.viewmodel.MainViewModel
 import java.time.LocalDate
+import androidx.core.view.GravityCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -107,7 +110,25 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, EditHabitActivity::class.java))
         }
         binding.btnMenu.setOnClickListener {
-            binding.drawerLayout.open()
+            //binding.drawerLayout.open()
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        //Link giao diện cài đặt và thông báo
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
+                R.id.nav_notifications -> {
+                    startActivity(Intent(this, NotificationsActivity::class.java))
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
+                else -> false
+            }
         }
     }
 }
