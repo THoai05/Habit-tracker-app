@@ -218,7 +218,6 @@ class EditHabitActivity : AppCompatActivity() {
             val bg = v.background
             if (bg is GradientDrawable) bg.setStroke(0, Color.TRANSPARENT)
         }
-        // Logic tìm view nào có màu trùng với selectedColor để viền đen lên (hơi phức tạp nếu check ngược màu,
-        // nhưng bro có thể tạm bỏ qua viền đen hoặc làm logic so sánh hex sau)
+
     }
 }
