@@ -24,14 +24,21 @@
         <activity android:name=".ui.auth.RegisterActivity" />
 
         <activity
-            android:name=".ui.habit.list.HabitListActivity"
-            android:exported="false" />
+            android:name=".MainActivity"
+            android:exported="true" />
 
-        <activity android:name=".MainActivity" />
         <activity android:name=".ui.habit.edit.EditHabitActivity" />
+
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:exported="true" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
+
+        <activity
+            android:name=".ui.statistics.StatisticsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
+
     </application>
 
 </manifest>
