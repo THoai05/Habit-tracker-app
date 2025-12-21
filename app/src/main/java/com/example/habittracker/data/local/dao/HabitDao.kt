@@ -2,6 +2,7 @@ package com.example.habittracker.data.local.dao
 
 import androidx.room.*
 import com.example.habittracker.data.model.Habit
+import com.example.habittracker.data.model.HabitHistory
 
 @Dao
 interface HabitDao {
@@ -23,4 +24,7 @@ interface HabitDao {
 
     @Query("SELECT * FROM Habits")
     suspend fun getAllHabits(): List<Habit>
+
+    @Query("SELECT * FROM habit_history WHERE date BETWEEN :startDate AND :endDate")
+    suspend fun getHabitsInDateRange(startDate: String, endDate: String): List<HabitHistory>
 }
