@@ -5,99 +5,102 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.data.model.Habit
-import com.example.habittracker.data.model.HabitHistory
 import com.example.habittracker.data.repository.HabitRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class MainViewModel(private val repository: HabitRepository) : ViewModel() {
 
-    // Danh sách habit để hiển thị lên UI
+    // Danh sách habit hiển thị
     private val _displayHabits = MutableLiveData<List<Habit>>()
     val displayHabits: LiveData<List<Habit>> = _displayHabits
 
-    // Ngày đang được chọn
-    private var selectedDate: LocalDate = LocalDate.now()
+    // Lưu ngày đang chọn (Dùng String để đồng bộ với Activity)
+    private var selectedDate: String = LocalDate.now().toString()
 
-    // Hàm load dữ liệu (gọi từ Activity)
-    fun loadHabitsForDate(date: LocalDate) {
-        selectedDate = date
+    // --- 1. Hàm set ngày (Đã lôi ra ngoài cho đúng cú pháp) ---
+    fun setCurrentSelectedDate(date: String) {
+        this.selectedDate = date
+        loadHabitsForDate(date)
+    }
+
+    // --- 2. Hàm load dữ liệu (Nhận vào String) ---
+    fun loadHabitsForDate(dateString: String) {
+        // Cập nhật lại biến selectedDate để chắc chắn
+        this.selectedDate = dateString
+
         viewModelScope.launch {
-            // 1. Lấy tất cả habit từ DB
-            val allHabits = repository.getHabits(userId = 1) // TODO: Lấy userId thật từ Session
+            // Lấy tất cả habit
+            val allHabits = repository.getHabits(userId = 1)
 
-            // 2. Lọc và kiểm tra trạng thái hoàn thành
-            val filteredList = processHabitList(allHabits, date)
+            // Chuyển String sang LocalDate để tính toán logic ngày tháng (createdAt, upNext)
+            val parsedDate = LocalDate.parse(dateString)
 
-            // 3. Đẩy dữ liệu ra UI
+            // Xử lý lọc và check trạng thái
+            val filteredList = processHabitList(allHabits, parsedDate, dateString)
+
             _displayHabits.value = filteredList
         }
     }
 
-    // Logic lọc và check history (Chuyển từ Activity sang đây)
-    private suspend fun processHabitList(habits: List<Habit>, date: LocalDate): List<Habit> {
-        val dateString = date.toString()
-
-        // Bước lọc ngày tháng & UpNext
+    // Logic lọc, check history VÀ tính Streak
+    private suspend fun processHabitList(habits: List<Habit>, dateCalc: LocalDate, dateString: String): List<Habit> {
+        // Bước 1: Lọc những habit chưa đến ngày sinh ra hoặc đã hết hạn
         val filtered = habits.filter { habit ->
             val createdDate = java.time.Instant.ofEpochMilli(habit.createdAt)
                 .atZone(java.time.ZoneId.systemDefault())
                 .toLocalDate()
 
-            // Chưa sinh ra thì chưa hiện
-            if (date.isBefore(createdDate)) return@filter false
+            if (dateCalc.isBefore(createdDate)) return@filter false
 
-            // Check UpNext
             if (habit.upNext != null && habit.upNext > 0) {
                 val endDate = createdDate.plusDays(habit.upNext.toLong())
-                if (date.isBefore(endDate)) return@filter true else return@filter false
+                if (dateCalc.isBefore(endDate)) return@filter true else return@filter false
             }
-
-            // Mặc định hiện (Daily, Weekly...)
             true
         }
 
-        // Bước check database xem đã hoàn thành chưa
+        // Bước 2: Check trạng thái hoàn thành & Tính Streak
         filtered.forEach { habit ->
-            val history = repository.getHistory(habit.id, dateString)
-            habit.isCompletedToday = (history != null && history.isCompleted)
+            // Check xem ngày này (dateString) đã làm chưa
+            habit.isCompletedToday = repository.isCompletedOnDate(habit.id, dateString)
+
+            // Tính chuỗi streak hiện tại (lấy từ cache hoặc tính lại)
+            habit.currentStreak = repository.calculateAndGetStreak(habit.id)
         }
 
         return filtered
     }
 
-    fun deleteHabit(habit: Habit) {
+    // --- 3. Hàm xử lý Check/Uncheck (Dùng toggle cho xịn) ---
+    fun completeHabit(habit: Habit) {
         viewModelScope.launch {
-            repository.deleteHabit(habit)
-            // Reload lại list sau khi xóa
-            loadHabitsForDate(selectedDate)
+            // Gọi toggle trong Repository (tự động thêm hoặc xóa)
+            repository.toggleHabit(habit.id, selectedDate)
+
+            // Sau khi toggle xong, tính lại trạng thái mới để update UI
+            val isCompletedNow = repository.isCompletedOnDate(habit.id, selectedDate)
+            val newStreak = repository.calculateAndGetStreak(habit.id)
+
+            // Cập nhật nhanh UI (Optimistic Update)
+            val currentList = _displayHabits.value?.map {
+                if (it.id == habit.id) {
+                    it.copy().apply {
+                        this.isCompletedToday = isCompletedNow
+                        this.currentStreak = newStreak
+                    }
+                } else {
+                    it
+                }
+            }
+            _displayHabits.value = currentList!!
         }
     }
 
-    fun completeHabit(habit: Habit) {
+    fun deleteHabit(habit: Habit) {
         viewModelScope.launch {
-            val dateString = selectedDate.toString()
-
-            // Check coi có chưa để tránh duplicate
-            val existing = repository.getHistory(habit.id, dateString)
-
-            if (existing == null) {
-                val history = HabitHistory(
-                    habitId = habit.id,
-                    date = dateString,
-                    isCompleted = true
-                )
-                repository.addHistory(history)
-
-                // Cập nhật nhanh UI tại chỗ (Optimistic Update)
-                // để không phải reload lại toàn bộ DB gây giật
-                val currentList = _displayHabits.value?.toMutableList() ?: return@launch
-                val index = currentList.indexOfFirst { it.id == habit.id }
-                if (index != -1) {
-                    currentList[index].isCompletedToday = true
-                    _displayHabits.value = currentList
-                }
-            }
+            repository.deleteHabit(habit)
+            loadHabitsForDate(selectedDate)
         }
     }
 }

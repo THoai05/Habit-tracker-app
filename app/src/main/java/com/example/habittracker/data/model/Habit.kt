@@ -51,4 +51,7 @@ data class Habit(
     // Thêm dòng này: Biến tạm để check trạng thái hoàn thành trên UI
     @Ignore
     var isCompletedToday: Boolean = false
+
+    @Ignore
+    var currentStreak: Int = 0
 }

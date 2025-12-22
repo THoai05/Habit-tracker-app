@@ -8,6 +8,15 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDateSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
+
     <TextView
         android:id="@+id/tvDayOfWeek"
         android:layout_width="wrap_content"
