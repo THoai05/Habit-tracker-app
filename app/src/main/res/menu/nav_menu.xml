@@ -13,8 +13,6 @@
             android:id="@+id/nav_stats"
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Thống kê" />
-
-        <!--Thêm nút thông báo -->
         <item
             android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_notifications"

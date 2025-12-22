@@ -29,13 +29,19 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.habit.edit.EditHabitActivity" />
+        
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
+            
         <activity
             android:name=".ui.notifications.NotificationsActivity"
-            android:exported="true" />
-        <activity android:name=".ui.notifications.NotificationDetailActivity" />
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.notifications.NotificationDetailActivity"
+            android:exported="false" />
+            
     </application>
 
 </manifest>

@@ -7,13 +7,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
-
-data class Notification(val icon: Int, val title: String, val message: String, val time: String)
+import com.example.habittracker.data.model.NotificationEntity
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class NotificationAdapter(
-    private val notifications: List<Notification>,
-    private val onItemClick: (Notification) -> Unit
+    private var notifications: List<NotificationEntity>,
+    private val onItemClick: (NotificationEntity) -> Unit
 ) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
+
+    fun updateData(newNotifications: List<NotificationEntity>) {
+        notifications = newNotifications
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_notification, parent, false)
@@ -22,10 +29,22 @@ class NotificationAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val notification = notifications[position]
-        holder.icon.setImageResource(notification.icon)
+        
+        // Chọn icon dựa trên type
+        val iconRes = when (notification.type) {
+            "ADD" -> R.drawable.ic_notifications
+            "COMPLETE" -> R.drawable.ic_notifications
+            else -> R.drawable.ic_notifications
+        }
+        
+        holder.icon.setImageResource(iconRes)
         holder.title.text = notification.title
         holder.message.text = notification.message
-        holder.time.text = notification.time
+        
+        // Định dạng thời gian
+        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        holder.time.text = sdf.format(Date(notification.timestamp))
+        
         holder.itemView.setOnClickListener { onItemClick(notification) }
     }
 

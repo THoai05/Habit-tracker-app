@@ -1,9 +1,12 @@
 package com.example.habittracker.ui.notifications
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.habittracker.MainActivity
 import com.example.habittracker.databinding.ActivityNotificationDetailBinding
+import com.example.habittracker.ui.habit.edit.EditHabitActivity
 
 class NotificationDetailActivity : AppCompatActivity() {
 
@@ -18,33 +21,49 @@ class NotificationDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
-        val title = intent.getStringExtra("title")
-        val message = intent.getStringExtra("message")
+        val title = intent.getStringExtra("title") ?: ""
+        val message = intent.getStringExtra("message") ?: ""
 
         binding.notificationDetailTitle.text = title
         binding.notificationDetailMessage.text = message
 
-        // Thêm nút một cách linh hoạt dựa trên loại thông báo
-        when (title) {
-            "Habit Added" -> {
-                addActionButton("View List") {
-                    // TODO: Điều hướng đến danh sách thói quen
+        // Xử lý các nút hành động dựa trên tiêu đề thông báo từ Database
+        when {
+            title.contains("Thêm thói quen thành công", ignoreCase = true) -> {
+                addActionButton("Thêm hành động") {
+                    val intent = Intent(this, EditHabitActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                addActionButton("Về trang chủ") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                    finish()
                 }
             }
-            "Habit Reminder" -> {
-                addActionButton("Complete") {
-                    // TODO: Đánh dấu thói quen là đã hoàn thành
-                }
-                addActionButton("Snooze") {
-                    // TODO: Tạm ẩn thông báo
+            title.contains("Đã hoàn thành", ignoreCase = true) -> {
+                addActionButton("Xem danh sách") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                    finish()
                 }
             }
-            "Habit Overdue" -> {
-                addActionButton("Start Now") {
-                    // TODO: Bắt đầu thực hiện thói quen
+            title.contains("Sắp đến giờ", ignoreCase = true) -> {
+                addActionButton("Thực hiện ngay") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                    finish()
                 }
-                addActionButton("Skip") {
-                    // TODO: Bỏ qua thói quen
+            }
+            title.contains("Quá hạn", ignoreCase = true) -> {
+                addActionButton("Bắt đầu ngay") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                    finish()
                 }
             }
         }
