@@ -25,6 +25,10 @@ class HabitRepository(
         habitDao.getHabitsByUser(userId)
     }
 
+    suspend fun getAllHabits(): List<Habit> = withContext(Dispatchers.IO) {
+        habitDao.getAllHabits()
+    }
+
     suspend fun getHabitById(id: Int): Habit? = withContext(Dispatchers.IO) {
         habitDao.getHabitById(id)
     }

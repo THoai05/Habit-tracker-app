@@ -84,7 +84,9 @@ class EditHabitViewModel(private val repository: HabitRepository) : ViewModel() 
             _saveSuccess.value = true
         }
     }
-
+    fun updateName(name: String) {
+        habitName.value = name
+    }
     // Các hàm update value từ Dialog
     fun updateColor(color: Int) { selectedColor.value = color }
     fun updateUpNext(value: Int) { upNext.value = value }

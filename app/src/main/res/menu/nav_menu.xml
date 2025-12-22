@@ -6,17 +6,19 @@
             android:icon="@drawable/ic_launcher_foreground"
             android:title="Trang chủ (Hôm nay)" />
         <item
-            android:id="@+id/nav_history"
-            android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Lịch sử" />
+            android:id="@+id/nav_manage_habit"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="Quản lý thói quen" />
         <item
             android:id="@+id/nav_stats"
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Thống kê" />
         <item
-            android:id="@+id/nav_notifications"
-            android:icon="@drawable/ic_notifications"
-            android:title="Thông báo" />
+            android:id="@+id/nav_stats_week_month"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="Thống kê theo tuần và tháng" />
+        <item android:id="@+id/nav_notifications" android:icon="@drawable/ic_notifications" android:title="Thông báo" />
+
     </group>
 
     <item android:title="Hệ thống">

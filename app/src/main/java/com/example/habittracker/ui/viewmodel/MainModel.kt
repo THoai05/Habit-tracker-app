@@ -1,4 +1,4 @@
-package com.example.habittracker.ui.viewmodel
+    package com.example.habittracker.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -103,4 +103,6 @@ class MainViewModel(private val repository: HabitRepository) : ViewModel() {
             loadHabitsForDate(selectedDate)
         }
     }
+
+
 }

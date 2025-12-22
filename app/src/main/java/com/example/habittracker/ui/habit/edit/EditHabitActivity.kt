@@ -42,11 +42,37 @@ class EditHabitActivity : AppCompatActivity() {
 
         setupViewModel()
         setupUI()
-        setupObservers()
+        setupObservers() // Quan sát LiveData trước để không bị ghi đè
 
-        // Load data nếu là Edit mode
+        // --- Lấy dữ liệu từ Intent (Suggested Habit hoặc Edit Habit) ---
         val habitId = intent.getIntExtra("habitId", -1)
-        viewModel.loadHabit(habitId)
+
+        if (habitId == -1) {
+            // Suggested Habit
+            intent.getStringExtra("habitName")?.let { name ->
+                viewModel.updateName(name)
+            }
+
+            intent.getStringExtra("habitColor")?.let { colorStr ->
+                val color = Color.parseColor(colorStr)
+                viewModel.updateColor(color)
+            }
+
+            val duration = intent.getIntExtra("habitDuration", -1)
+            if (duration != -1) viewModel.updateGoal(duration, "times")
+
+            val upNext = intent.getIntExtra("habitUpNext", -1)
+            if (upNext != -1) viewModel.updateUpNext(upNext)
+
+            intent.getStringExtra("habitRepeat")?.let { viewModel.updateRepeat(it) }
+            intent.getStringExtra("habitTimeMode")?.let { viewModel.updateTime(it, null) }
+            intent.getStringExtra("habitReminderMode")?.let { viewModel.updateReminder(it, null) }
+            intent.getStringExtra("habitTag")?.let { viewModel.updateTag(it) }
+
+        } else {
+            // Edit Habit có sẵn
+            viewModel.loadHabit(habitId)
+        }
     }
 
     private fun setupViewModel() {
