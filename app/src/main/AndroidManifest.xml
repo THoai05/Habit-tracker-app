@@ -41,6 +41,14 @@
         <activity
             android:name=".ui.notifications.NotificationDetailActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.statistics.StatisticsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.habit.manage.ManageHabitActivity"
+            android:exported="false" />
             
     </application>
 
