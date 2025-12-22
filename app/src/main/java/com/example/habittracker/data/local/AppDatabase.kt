@@ -6,8 +6,6 @@ import com.example.habittracker.data.local.dao.*
 import com.example.habittracker.data.model.*
 import android.content.Context
 import androidx.room.Room
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 
 @Database(
     entities = [
@@ -18,9 +16,10 @@ import kotlinx.coroutines.launch
         HabitGoal::class,
         HabitReminder::class,
         UserSettings::class,
-        StreakCache::class
+        StreakCache::class,
+        NotificationEntity::class
     ],
-    version = 2, // tăng version từ 1 -> 2
+    version = 4, // Tăng lên 4 để ép Room phải reset hoàn toàn
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -32,6 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun habitReminderDao(): HabitReminderDao
     abstract fun userSettingsDao(): UserSettingsDao
     abstract fun streakCacheDao(): StreakCacheDao
+    abstract fun notificationDao(): NotificationDao
 }
 
 object DatabaseProvider {
@@ -45,7 +45,7 @@ object DatabaseProvider {
                 AppDatabase::class.java,
                 "habit_tracker_db"
             )
-                .fallbackToDestructiveMigration() // xóa DB cũ và tạo DB mới
+                .fallbackToDestructiveMigration() // Xóa hết dữ liệu cũ để tránh lỗi integrity
                 .build()
             INSTANCE = instance
             instance

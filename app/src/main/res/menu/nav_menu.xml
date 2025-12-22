@@ -14,9 +14,9 @@
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Thống kê" />
         <item
-            android:id="@+id/nav_stats_week_month"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
-            android:title="Thống kê theo tuần và tháng" />
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_notifications"
+            android:title="Thông báo" />
     </group>
 
     <item android:title="Hệ thống">
